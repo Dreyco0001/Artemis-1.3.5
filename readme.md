@@ -1,41 +1,57 @@
-# ReservaCancha - Aplicación de Reserva de Canchas
+# ¿Qué es Artemis?
 
-## Resumen del Proyecto
+Artemis es un proyecto en progeso el cual funcionara para poder brindar el trasporte en esta epoca de cuarentena dado que ultimamente para nuestros alumnos de duoc uc durante ciertas horas especificas se vuelve complicado encontrar trasporte
 
-ReservaCancha es una aplicación móvil desarrollada en Ionic 7.2.0 que facilita la reserva de canchas deportivas. La aplicación permite a los usuarios buscar, reservar y gestionar canchas en diferentes ubicaciones de manera rápida y sencilla desde sus dispositivos móviles. Con una interfaz intuitiva y funcionalidad en tiempo real, ReservaCancha está diseñada para mejorar la experiencia de los jugadores y optimizar la gestión de las instalaciones deportivas.
+---
 
-## Necesidad
+## Proyecto artemis
 
-La gestión de reservas de canchas puede ser un proceso complejo y que consume tiempo, tanto para los administradores como para los usuarios. A menudo, las instalaciones deportivas enfrentan problemas de coordinación, conflictos en las reservas y una comunicación ineficiente. ReservaCancha aborda estas necesidades al proporcionar una solución centralizada que:
+Autores
 
-- Facilita la reserva y gestión de canchas a través de una aplicación móvil.
-- Reduce los conflictos de reserva mediante un sistema de disponibilidad en tiempo real.
-- Mejora la comunicación entre los usuarios y los administradores de las instalaciones.
-- Permite a los usuarios consultar la disponibilidad y hacer reservas de manera conveniente desde cualquier lugar.
+- [@jofrestrom](https://www.github.com/jofrestrom)
+- [@Dreyco](https://www.github.com/Dreyco0001)
 
-## Instalación
+## Installation
 
-Para instalar y ejecutar la aplicación ReservaCancha, sigue estos pasos:
+```
+git clone https://github.com/jofrestrom/Artemis-definitivo.gitnpm install
+```
 
-1. **Clonar el repositorio:**
+```javascript
+npm install leaflet
+npm install @asymmetrik/ngx-leaflet
+```
 
-   ```bash
-   git clone https://github.com/tu-usuario/reservacancha.git
+```
+npm install @ionic/storage
+```
 
-2. **Navegar al directorio del proyecto:**
+```
+npm install @ionic/storage-angular
+```
 
-   ```bash
-   cd reservacancha
+```
+npm i leaflet-control-geocoder
+npm install leaflet-routing-machine
+```
 
-3. **Instalar las dependencias:**
+```
+npm install @types/leaflet-routing-machine
+```
 
-   ```bash
-   npm install
+y para ejecutar
 
-4. **Ejecutar la aplicación:**
+```
+ionic serve
+```
 
-   ```bash
-   ionic serve
+## Tecnologias usadas
+
+**tecnologias:** Artemis, Ionic, HTML5 y JS
 
 
-Este README cubre la información esencial sobre el proyecto, su instalación y la justificación para su desarrollo. Puedes ajustar los detalles según tus necesidades específicas.
+# link de canva
+
+```
+https://www.canva.com/design/DAGUzqS08AY/fGw0A6aiXOFJxt8iGkuxxg/edit?utm_content=DAGUzqS08AY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+```
