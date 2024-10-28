@@ -1,0 +1,43 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>iniciar_sesion</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content >
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1"></ion-col>
+      <ion-col size="10">
+        <ion-card>
+          <ion-card-header>Login de usuario</ion-card-header>
+          <ion-card-content>
+            <ion-input [(ngModel)]="correo"  type="email" label="Correo" labelPlacement="stacked" fill="outline"></ion-input>
+            
+            <br>
+            <ion-input [(ngModel)]="password" type="password" label="Password" labelPlacement="stacked" fill="outline"></ion-input>
+            <br>
+            <ion-button (click)="login()" size="block" color="success" >INGRESAR</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="1"></ion-col>
+    </ion-row>
+
+    <ion-row>
+
+      <ion-col size="1"></ion-col>
+
+      <ion-col size="10">
+        <ion-card id="texto_regi">
+
+          <p>No tienes cuenta.. regístrate <a routerLink="/registrar">AQUÍ</a> </p>
+
+          <p>quieres recuperar tu contraseña? <a routerLink="/recuperar">AQUÍ</a></p>
+        </ion-card>
+      </ion-col>
+
+      <ion-col size="1"></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

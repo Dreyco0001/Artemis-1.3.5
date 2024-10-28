@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Registro</ion-title>
+    <ion-title>registrar</ion-title>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -8,31 +8,51 @@
 </ion-header>
 
 <ion-content>
-  
+  <ion-grid>
   <ion-card>
-    <form [formGroup]="persona" (ngSubmit)="registrar()">
-      <ion-input formControlName="rut" type="text" labelPlacement="stacked" label="RUT"></ion-input>
-      <ion-input formControlName="nombre" type="text" labelPlacement="stacked" label="Nombre"></ion-input>
-      <ion-input formControlName="fecha_nacimiento" type="date" labelPlacement="stacked" label="Fecha nacimiento"></ion-input>
-      <ion-select formControlName="genero" label="Género" labelPlacement="stacked">
-        <ion-select-option>Masculino</ion-select-option>
-        <ion-select-option>Femenino</ion-select-option>
-        <ion-select-option>Otro</ion-select-option>
-      </ion-select>
-      <ion-input formControlName="correo" type="email" labelPlacement="stacked" label="Correo (sólo correos duoc)"></ion-input>
-      <ion-input formControlName="contrasena" type="password" labelPlacement="stacked" label="Contraseña"></ion-input>
-      <ion-input formControlName="valida_contrasena" type="password" labelPlacement="stacked" label="Repita contraseña"></ion-input>
-      
-      <ion-label>¿Tiene equipo?</ion-label>
-      <ion-radio-group formControlName="tiene_equipo">
-        <ion-radio value="si">Si</ion-radio>
-        <ion-radio value="no">No</ion-radio>
-      </ion-radio-group>
-      
-      <ion-input *ngIf="persona.controls.tiene_equipo.value=='si'" formControlName="nombre_equipo" type="text" label="Nombre equipo" labelPlacement="stacked"></ion-input>
+    <ion-card-header>Informacion usuario</ion-card-header>
+    <ion-card-content>
+      <form [formGroup] = "persona" (ngSubmit)="registrar()">
+        <ion-input formControlName="nombre" type="text" label="NOMBRE"></ion-input>
+        <br>
+        <ion-input formControlName="apellido" type="text" label="APELLIDO"></ion-input>
+        <br>
+        <ion-input formControlName="rut" type="text" label="RUT"></ion-input>
+        <br>
+        <ion-input formControlName="correo" type="text" label="CORREO"></ion-input>
+        <br>
+        <ion-input formControlName="fecha_naci" type="date">FECHA DE NACIMIENTO</ion-input>
+        <br>
+        <ion-input formControlName="password" type="password" label="CONTRASEÑA"></ion-input>
+        <br>
+        <ion-input formControlName="confi_password" type="password" label="CONFIRMAR CONTRASEÑA"></ion-input>
+        <br>
+        <ion-select label="GENERO" formControlName="genero">
+          <ion-select-option value="Masculino">Masculino</ion-select-option>
+          <ion-select-option value="Femenino">Femenino</ion-select-option>
+          <ion-select-option value="N/A">Prefiero no decirlo</ion-select-option>
+        </ion-select>
 
-      <ion-button [disabled]="persona.invalid" type="submit" size="block" color="warning">REGISTRAR</ion-button>
-    </form>
+        <ion-select formControlName="veiculo" label="¿TIENE AUTITO?" (ionChange)="onOpcionChange($event.detail.value)">
+          <ion-select-option value="SI">Si tengo 😁</ion-select-option>
+          <ion-select-option value="NO">No tengo 😢</ion-select-option>
+        </ion-select>
+
+        <div *ngIf="mostrarInput">
+          <ion-input formControlName="marca" type="text" label="MARCA"></ion-input>
+          <ion-input formControlName="modelo" type="text" label="MODELO"></ion-input>
+          <ion-input formControlName="patente" type="text" label="PATENTE"></ion-input>
+          <ion-input formControlName="canti_acientos" type="number" label="CANTIDAD ACIENTOS"></ion-input>
+        </div>
+
+        <ion-button [disabled]="persona.invalid" (click)="enviarCorreo()" class="enviar-correo" type="submit" size="block" color="warning">
+          <ion-icon [ngClass]="{'animar': animarIcono}" slot="start" name="mail"></ion-icon>
+          REGISTRAR
+        </ion-button>
+
+        <p>Ya tienes cuenta?<a routerLink="/login">Iniciar sesion</a></p>
+      </form>
+    </ion-card-content>
   </ion-card>
-
+</ion-grid>
 </ion-content>

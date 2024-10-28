@@ -18,9 +18,9 @@ export class RecuperarPage implements OnInit {
   }
 
   async recuperar(){
-    if(await this.usuarioService.recuperarUsuario(this.email)){
+    if(await this.usuarioService.recuperar(this.email)){
       alert("Revisa tu correo para encontrar la nueva contraseña!")
-      this.router.navigate(['/login']);
+      this.router.navigate(['/Iniciar_sesion']);
     }else{
       alert("ERROR! el usuario no existe!")
     }

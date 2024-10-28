@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AlertController } from '@ionic/angular';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
@@ -10,61 +11,60 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 })
 export class RegistroPage implements OnInit {
 
-  //aquí podemos crear variables:
-  persona = new FormGroup({
-    rut: new FormControl('',[Validators.required,Validators.pattern("[0-9]{7,8}-[0-9kK]{1}")]),
-    nombre: new FormControl('',[Validators.required,Validators.pattern("[A-Za-z ]{3,}")]),
-    fecha_nacimiento: new FormControl('',[Validators.required]),
-    genero: new FormControl('',[Validators.required]),
-    correo: new FormControl('',[Validators.required, Validators.pattern("[a-zA-Z0-9.]+(@duocuc.cl)")]),
-    contrasena: new FormControl('',[Validators.required, Validators.pattern("^(?=.*[-!#$%&/()?¡_.])(?=.*[A-Za-z])(?=.*[a-z]).{8,}$")]),
-    valida_contrasena: new FormControl('',[Validators.required, Validators.pattern("^(?=.*[-!#$%&/()?¡_.])(?=.*[A-Za-z])(?=.*[a-z]).{8,}$")]),
-    tiene_equipo: new FormControl('no',[Validators.required]),
-    nombre_equipo: new FormControl('',[]),
-    tipo_usuario: new FormControl('Alumno')
-  });
+  
+  enviado = false;
+  animarIcono = false;
 
-  constructor(private router: Router, private usuarioService: UsuarioService) {
-    this.persona.get("rut")?.setValidators([Validators.required,Validators.pattern("[0-9]{7,8}-[0-9kK]{1}"),this.validarRut()]);
-   }
+  miFormulario: FormGroup;
+  mostrarInput: boolean = false;
 
+  constructor(private fb: FormBuilder, private usuarioService: UsuarioService,private router: Router, 
+              private alertController: AlertController) { 
+    this.miFormulario = this.fb.group({
+      opcion: [''],
+      inputExtra: ['']
+    });
+  }
+
+  onOpcionChange(opcion: string) {
+    this.mostrarInput = opcion === 'SI';
+  }
+  
   ngOnInit() {
   }
 
-  //podemos crear métodos:
-  public async registrar(){
-    if( !this.validarEdad18(this.persona.controls.fecha_nacimiento.value || "") ){
-      alert("ERROR! debe tener al menos 18 años para registrarse!");
-      return;
-    }
-    
-    if(this.persona.controls.contrasena.value != this.persona.controls.valida_contrasena.value){
-      alert("ERROR! las contraseñas no coinciden!");
-      return;
-    }
+  persona = new FormGroup({
+    nombre: new FormControl('', [Validators.maxLength(10), Validators.minLength(4),Validators.required]),
+    apellido: new FormControl('', [Validators.maxLength(10), Validators.minLength(4),Validators.required]),
+    rut: new FormControl('', [Validators.maxLength(10), Validators.minLength(9),Validators.required]),
+    correo: new FormControl('',[Validators.minLength(4),Validators.required, Validators.pattern("[a-zA-Z0-9.]+(@duocuc.cl) || [a-zA-Z0-9.]+(@profesor.duocuc.cl)")]),
+    fecha_naci: new FormControl('', Validators.required),
+    password: new FormControl('',[Validators.maxLength(10), Validators.minLength(4)]),
+    confi_password: new FormControl('',[Validators.maxLength(10), Validators.minLength(4)]),
+    genero: new FormControl(Validators.required),
+    tipo_user: new FormControl('Alumno'),
+    veiculo: new FormControl('',[Validators.required]),
+    marca: new FormControl(),
+    modelo: new FormControl(),
+    patente: new FormControl(),
+    canti_acientos: new FormControl()
+  })
 
-    if(await this.usuarioService.createUsuario(this.persona.value)){
-      this.router.navigate(['/login']);
-      this.persona.reset();
-      alert("Usuario creado con éxito!")
-    }
+  validad_edad(minAge: number, maxAge: number): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const fecha = new Date(control.value);
+      const today = new Date();
+      let age = today.getFullYear() - fecha.getFullYear();
+      const monthDiff = today.getMonth() - fecha.getMonth();
+
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < fecha.getDate())) {
+        age--;
+      }
+
+      return (age >= minAge && age <= maxAge) ? null : { 'invalidAge': true };
+    };
   }
-
-  //valido la edad:
-  validarEdad18(fecha_nacimiento: string){
-    var edad = 0;
-    if(fecha_nacimiento){
-      const fecha_date = new Date(fecha_nacimiento);
-      const timeDiff = Math.abs(Date.now() - fecha_date.getTime());
-      edad = Math.floor((timeDiff / (1000 * 3600 * 24))/365);
-    }
-    if(edad>=18){
-      return true;
-    }else{
-      return false;
-    }
-  }
-
+  
   validarRut():ValidatorFn{
     return () => {
       const rut = this.persona.controls.rut.value;
@@ -92,4 +92,50 @@ export class RegistroPage implements OnInit {
       return null;
     };
   }
+  async validadCorreo(){
+    
+    console.log(this.persona.value.tipo_user)
+
+  }
+
+  async registrar() {
+    
+    if(this.persona.controls.password.value != this.persona.controls.confi_password.value){
+      alert("las contraseñas no coinciden")
+      return;
+    }
+    
+    
+    if(this.persona.controls.password.value != this.persona.controls.confi_password.value){
+      await this.presentAlert('Problema', 'las contraseñas no coinsiden');
+    }else if ( await this.usuarioService.crearUsuario(this.persona.value)){
+      await this.presentAlert('Perfecto', 'Registrado correctamente');
+      this.persona.reset();
+      await this.usuarioService.getUsuarios();
+      this.router.navigate(['']);  
+    } else {
+      await this.presentAlert('Error', 'El usuario no se pudo registrar');
+    }
+  }
+
+
+  async presentAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header: header,
+      message: message,
+      buttons: ['Entendido'],
+    });
+    await alert.present();
+  }
+
+  enviarCorreo() {
+    this.enviado = false;
+    this.animarIcono = true;
+
+    setTimeout(() => {
+      this.animarIcono = false;
+      this.enviado = true;
+    }, 2000);
+  }
+
 }

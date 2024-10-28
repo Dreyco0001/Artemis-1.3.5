@@ -6,86 +6,171 @@ import { Storage } from '@ionic/storage-angular';
   providedIn: 'root'
 })
 export class UsuarioService {
-
-  //y en el constructor se crea una variable del módulo:
   constructor(private storage: Storage) {
     this.init();
   }
 
   async init(){
     await this.storage.create();
+    
     let admin = {
-      "rut": "16666666-6",
-      "nombre": "alambrito",
-      "fecha_nacimiento": "1990-03-24",
-      "genero": "Masculino",
-      "correo": "admin@duocuc.cl",
-      "contrasena": "Admin123.",
-      "valida_contrasena": "Admin123.",
-      "tiene_equipo": "si",
-      "nombre_equipo": "",
-      "tipo_usuario": "Administrador"
-    };
-    await this.createUsuario(admin);
-  }
-
-  //aquí vamos a crear toda nuestra lógica de programación
-  //DAO:
-  public async createUsuario(usuario:any): Promise<boolean>{
-    let usuarios: any[] = await this.storage.get("usuarios") || [];
-    if(usuarios.find(usu=>usu.rut==usuario.rut)!=undefined){
-      return false;
+      rut: '12345678-k',
+      nombre: 'admin',
+      correo: 'admin@duocuc.cl',
+      password: 'admin1234.',
+      confirmpassword: 'admin1234.',
+      fecha: '2003-01-01',
+      genero: 'Otro',
+      tipo_user: 'Administrador',
+      veiculo: 'No',
+      marca: '',
+      patente: '',
+      modelo: '',
+      canti_acientos: '',
     }
+
+    let Alumno = {
+      rut: '21211211-k',
+      nombre: 'marcela',
+      correo: 'Mar.@duocuc.cl',
+      password: 'marcela123.',
+      confirmpassword: 'marcela123.',
+      fecha: '2003-01-01',
+      genero: 'Femenino',
+      tipo_user: 'Alumno',
+      veiculo: 'No',
+      marca: '',
+      patente: '',
+      modelo: '',
+      canti_acientos: '',
+    }
+
+    let conductor = {
+      rut: '78787787-7',
+      nombre: 'Juanito',
+      correo: 'jano.@duocuc.cl',
+      password: 'jano123.',
+      confirmpassword: 'jano123.',
+      fecha: '2003-01-01',
+      genero: 'Masculino',
+      tipo_user: 'Conductor',
+      veiculo: 'Si',
+      marca: 'Hunday',
+      patente: 'as-as-12',
+      modelo: 'hundai sedan',
+      canti_acientos: 4,
+    }
+
+    let profesor ={
+      rut: '6666666-6',
+      nombre: 'Lucy',
+      apellido:'Fernanda',
+      correo: 'Lucy@profesor.duocuc.cl',
+      password: 'lucy123.',
+      confirmpassword: 'lucy.',
+      fecha: '2003-01-01',
+      genero: 'otro',
+      tipo_user: 'Profesor',
+      veiculo: 'No',
+      marca: '',
+      patente: '',
+      modelo: '',
+      canti_acientos: '',
+    }
+
+    await this.crearUsuario(admin);
+    await this.crearUsuario(Alumno);
+    await this.crearUsuario(profesor);
+    await this.crearUsuario(conductor);
+  }
+  
+
+  private usuarioAutenticado: any = null;  
+  private AlumnoCorreo = /^[a-zA-Z0-9._%+-]+@duocuc\.cl$/;
+  private ProfeCorreo = /^[a-zA-Z0-9._%+-]+@profesor\.duocuc\.cl$/;
+
+  public async crearUsuario(usuario:any): Promise<boolean>{
+    
+    let usuarios: any[] = await this.storage.get("Usuarios") || [];
+    
+    if(usuarios.find(user => user.rut === usuario.rut) != undefined){
+      return false; 
+    }
+    if (!this.ProfeCorreo.test(usuario.correo) && !this.AlumnoCorreo.test(usuario.correo)){
+      return false;
+    } 
+    if(this.ProfeCorreo.test(usuario.correo)){
+      usuario.tipo_user = "Profesor"
+    }
+    console.log(usuario.value);
     usuarios.push(usuario);
-    await this.storage.set("usuarios",usuarios);
-    return true;
+    await this.storage.set("Usuarios", usuarios);
+    return true;    
   }
 
-  public async getUsuario(rut:string): Promise<any>{
-    let usuarios: any[] = await this.storage.get("usuarios") || [];
-    return usuarios.find(usu=>usu.rut==rut);
-  }
-
-  public async getUsuarios(): Promise<any[]>{
-    let usuarios: any[] = await this.storage.get("usuarios") || [];
-    return usuarios;
-  }
-
-  public async updateUsuario(rut:string, nuevoUsuario:any): Promise<boolean>{
-    let usuarios: any[] = await this.storage.get("usuarios") || [];
-    let indice: number = usuarios.findIndex(usu=>usu.rut==rut);
-    if(indice==-1){
-      return false;
-    }
-    usuarios[indice] = nuevoUsuario;
-    await this.storage.set("usuarios",usuarios);
-    return true;
-  }
-
-  public async deleteUsuario(rut:string): Promise<boolean>{
-    let usuarios: any[] = await this.storage.get("usuarios") || [];
-    let indice: number = usuarios.findIndex(usu=>usu.rut==rut);
-    if(indice==-1){
-      return false;
-    }
-    usuarios.splice(indice,1);
-    await this.storage.set("usuarios",usuarios);
-    return true;
-  }
-
-  public async login(correo: string, contrasena: string): Promise<any>{
-    let usuarios: any[] = await this.storage.get("usuarios") || [];
-    const usu =  usuarios.find(elemento=> elemento.correo==correo && elemento.contrasena==contrasena);
-    if(usu){
-      //localStorage almacena la información SI o SI como String:
-      localStorage.setItem("usuario", JSON.stringify(usu) );
+  public async iniciar(correo: string, contrasena: string): Promise<any>{
+    let usuarios: any[] = await this.storage.get("Usuarios") || [];
+    const usuario = usuarios.find(user => user.correo === correo && user.password === contrasena);
+    if (usuario) {
+      localStorage.setItem("Usuario", JSON.stringify(this.usuarioAutenticado));
       return true;
     }
     return false;
   }
 
-  public async recuperarUsuario(correo:string): Promise<any>{
-    let usuarios: any[] = await this.storage.get("usuarios") || [];
+  public async EliminarUsuario(rut: string): Promise<boolean>{
+    let usuarios: any[] = await this.storage.get("Usuarios") || [];
+    let indice = usuarios.findIndex(elemento => elemento.rut === rut);
+    if (indice === -1) {
+      return false;
+    }
+    usuarios.splice(indice, 1);
+    await this.storage.set("Usuarios", usuarios);
+    return true;
+  }
+
+  public async getUsuario(rut: string){
+    let usuarios: any[] = await this.storage.get("Usuarios") || [];
+    return usuarios.find(user =>user.rut === rut)
+  }
+  
+  public async getUsuarios(){
+    let usuarios: any[] = await this.storage.get("Usuarios") || [];
+    return usuarios
+  }
+
+  public async ActualizarUsuario(rut: string, nuevoUsuario: any) {
+    let usuarios: any[] = await this.storage.get("Usuarios") || [];
+    let indice = usuarios.findIndex(elemento => elemento.rut === rut);
+    
+    if (indice === -1) {
+      return false;
+    }
+    usuarios[indice] = nuevoUsuario;
+    await this.storage.set("Usuarios", usuarios);
+    return true;
+  }public async Iniciar_sesion(correo: string, password: string): Promise<boolean> {
+    let usuarios: any[] = await this.storage.get("Usuarios") || [];
+    const usuario = usuarios.find(user => user.correo === correo && user.password === password);
+    if (usuario) {
+      this.usuarioAutenticado = usuario;
+      localStorage.setItem("Usuario", JSON.stringify(this.usuarioAutenticado));
+      return true;
+    }
+    return false;
+  }
+  public getUsuarioValido() {
+    return this.usuarioAutenticado;
+  }
+
+  public async validarpassword(contra: string, confirmar: string){
+    let usuarios: any[] = await this.storage.get("Usuarios") || [];
+    const Contra2 = usuarios.find(Cont => Cont.password === contra && Cont.confirmpassword === confirmar);
+    return Contra2;
+  }
+
+  public async recuperar(correo:string){
+    let usuarios: any[] = await this.storage.get("Usuarios") || [];
     return usuarios.find(elemento=> elemento.correo == correo);
   }
 

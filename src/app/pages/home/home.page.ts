@@ -8,17 +8,16 @@ import { NavController } from '@ionic/angular';
 })
 export class HomePage implements OnInit{
 
-  //Vamos a crear una variable que almacenara la información del localStorage:
   usuario: any;  
 
   constructor(private navController: NavController) {}
 
   ngOnInit(){
-    this.usuario = JSON.parse(localStorage.getItem("usuario") || '');
-  }
+    this.usuario = JSON.parse(localStorage.getItem('Usuarios') || '');
+    console.log(this.usuario)  }
 
-  logout(){
-    localStorage.removeItem('usuario');
+  close(){
+    localStorage.removeItem('usuarios');
     this.navController.navigateRoot('/login');
   }
 

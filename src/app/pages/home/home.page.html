@@ -1,32 +1,97 @@
 <ion-header>
   <ion-toolbar>
-    <p slot="end">Bienvenido: {{usuario.nombre | titlecase}}</p>
+    <ion-title>
+      Blank
+    </ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()">
+      <ion-button (click)="close()">
         <ion-icon name="log-out"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>
-      Home
-    </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   
-  <ion-tabs>
-    <ion-tab-bar slot="bottom">
-      <ion-tab-button tab="reservas">
-        <ion-icon name="calendar-number-sharp"></ion-icon>
-      </ion-tab-button>
-      <ion-tab-button tab="administrar" *ngIf="usuario.tipo_usuario=='Administrador'">
-        <ion-icon name="key-sharp"></ion-icon>
-      </ion-tab-button>
-      <ion-tab-button tab="perfil">
-        <ion-icon name="person-sharp"></ion-icon>
-      </ion-tab-button>
 
-    </ion-tab-bar>
-  </ion-tabs>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Viaje a la Montaña</ion-card-title>
+            <ion-card-subtitle>Salida: 10:00 AM</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Tipo de Vehículo: SUV</p>
+            <p>Duración: 3 horas</p>
+            <ion-chip color="success">
+              <ion-icon name="star"></ion-icon>
+              <ion-label>4.9</ion-label>
+            </ion-chip>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Tour por la Ciudad</ion-card-title>
+            <ion-card-subtitle>Salida: 2:00 PM</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Tipo de Vehículo: Van</p>
+            <p>Duración: 2 horas</p>
+            <ion-chip color="success">
+              <ion-icon name="star"></ion-icon>
+              <ion-label>4.7</ion-label>
+            </ion-chip>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
 
+    <!-- Más Viajes Disponibles -->
+    <ion-row>
+      <ion-col size="12" size-md="6">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Escapada a la Playa</ion-card-title>
+            <ion-card-subtitle>Salida: 9:00 AM</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Tipo de Vehículo: Sedán</p>
+            <p>Duración: 5 horas</p>
+            <ion-chip color="success">
+              <ion-icon name="star"></ion-icon>
+              <ion-label>4.6</ion-label>
+            </ion-chip>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+  </ion-grid>
+
+  <ion-footer>
+    <ion-toolbar>
+      <ion-tabs>
+        <ion-tab-bar slot="bottom">
+          <ion-tab-button  tab="reservas">
+            <ion-icon name="car-sport-sharp"></ion-icon>
+          </ion-tab-button>
+          <ion-tab-button  tab="administrar+-" >
+            <ion-icon name="id-card-sharp"></ion-icon>
+          </ion-tab-button>
+          <ion-tab-button  tab="perfil">
+    
+            <ion-icon name="person-circle-sharp"></ion-icon>
+          </ion-tab-button>
+        </ion-tab-bar>
+      </ion-tabs>
+    </ion-toolbar>
+  </ion-footer>
+  
+ 
 </ion-content>
+

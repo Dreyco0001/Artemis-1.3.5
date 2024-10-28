@@ -8,29 +8,19 @@ import { UsuarioService } from 'src/app/services/usuario.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
-  //aquí podemos crear variables, constrantes, listas, arreglos, json, etc:
-  //NOMBRE_VARIABLE: TIPO_DATO = VALOR;
-  titulo: string = "PÁGINA DE LOGIN";
-  numero: number = 5;
-  decimal: number = 5.2;
-  existe: boolean = true;
-  fecha_hoy: Date = new Date();
-  nombres: string[] = ["Pedro","Juan","Diego"];
-  persona: any = {"nombre":"Jeison", "edad": 5};
-
-  //NgModel:
-  email: string = "";
+  
+  correo: string = "";
   password: string = "";
+  
+  mostrar: boolean = false
 
   constructor(private router: Router, private usuarioService: UsuarioService) { }
 
   ngOnInit() {
   }
 
-  //método asociado al boton para hacer un login:
   async login(){
-    if(await this.usuarioService.login(this.email,this.password)){
+    if(await this.usuarioService.iniciar(this.correo,this.password)){
       this.router.navigate(['/home']);
     }else{
       alert("CORREO O CONTRASEÑA INCORRECTOS!");
