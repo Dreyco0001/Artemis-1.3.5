@@ -14,7 +14,7 @@ Autores
 ## Installation
 
 ```
-git clone https://github.com/jofrestrom/Artemis-definitivo.gitnpm install
+git clone https://github.com/Dreyco0001/Artemis-1.3.5 install
 ```
 
 ```javascript
